@@ -11,6 +11,7 @@ from scrapy.exceptions import NotConfigured, IgnoreRequest
 from scrapy.http import Request
 from scrapy.utils.httpobj import urlparse_cached
 
+
 class RobotsTxtMiddleware(object):
     DOWNLOAD_PRIORITY = 1000
 
@@ -40,6 +41,8 @@ class RobotsTxtMiddleware(object):
     def robot_parser(self, request, spider):
         url = urlparse_cached(request)
         netloc = url.netloc
+        if url.scheme == 'file':
+            return
         if netloc not in self._parsers:
             self._parsers[netloc] = None
             robotsurl = "%s://%s/robots.txt" % (url.scheme, url.netloc)
